@@ -5,6 +5,7 @@ Updated: 2026-07-15
 ## Released
 
 - Production: <https://decod.ing> and <https://www.decod.ing>
+- Source: <https://github.com/whoo3474/decoding-v6>
 - Fallback: <https://decoding-v6.wjstks3474.workers.dev>
 - Staging: <https://decoding-v6-staging.wjstks3474.workers.dev>
 - Cloudflare production version: `fd0ce2f9-6604-45b2-b1cc-59f01c9a7df1`
@@ -28,9 +29,10 @@ The user explicitly requested implementation of the complete 47-tool, desktop, a
 ## Verified
 
 - `pnpm verify`: format, lint, strict types, unit/fixture/CLI tests, benchmark, content/link/network/parity/extension checks, all builds, bundle budget
+- GitHub Actions hosted CI: [`verify` and `test:e2e` passed](https://github.com/whoo3474/decoding-v6/actions/runs/29361506397)
 - Playwright: desktop/mobile UI, local worker operations, PWA offline reload, same-origin request audit, privacy canary, IndexedDB raw-secret absence, and axe
 - public fixture quality: at least 95% precision and 90% recall for each detector family
-- 1 MiB engine benchmark: first candidate p75 4.3 ms, complete p75 31.5 ms
+- 1 MiB engine benchmark: first candidate p75 2.9 ms, complete p75 29.8 ms
 - initial application JavaScript: 18.8 KiB gzip; heavy operation categories remain lazy
 - Tauri: Rust `cargo check`, native release bundle, updater signing, checksums, code-sign verification, capability allowlist, and two-minute no-socket runtime observation
 - Cloudflare: staging, production, custom-domain cutover, external Chromium smoke/privacy gate, and rollback/restore drill
@@ -52,7 +54,7 @@ The private updater key is outside the repository. The public key is in Tauri co
 - genuinely independent blind fixtures: public deterministic fixtures pass, but blind data cannot be authored and scored by the same implementation run
 - developer/SRE/security beta with 10 real participants and the 8/10 ten-second completion gate
 - traffic, task completion, Search Console, retention, locale, desktop install/repeat/crash-free, and advertising baselines over the PRD observation windows
-- Show HN, subreddit, extension-store, and public GitHub launch activities
+- Show HN, subreddit, and extension-store launch activities
 - Apple Developer ID signing/notarization and macOS universal release require owner credentials; Windows/Linux packages require a connected release workflow
 - full manual WCAG 2.2 AA audit and real-user assistive-technology verification
 - PR preview environment requires the repository to be connected to a Git remote/CI host

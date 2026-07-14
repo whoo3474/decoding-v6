@@ -12,7 +12,7 @@ Updated: 2026-07-15
 - [x] 47 operation routes and 8 detector pages match registries
 - [x] offline PWA, CLI, desktop engineering build, and MV3 extension build
 - [x] MIT, security policy, contributing guide, fixture issue form, dependency record, and threat model
-- [ ] connect GitHub CI and confirm the first hosted run
+- [x] connect GitHub CI and confirm the first [hosted run](https://github.com/whoo3474/decoding-v6/actions/runs/29361506397)
 - [ ] independent blind fixture review
 - [ ] Apple-notarized universal desktop beta before enabling download
 

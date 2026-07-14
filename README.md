@@ -4,7 +4,7 @@
 
 decod.ing is a zero-account universal decoder and private developer workbench. It detects eight format families, follows recursive decode chains, exposes evidence and deterministic warnings, and provides 47 local format/convert/inspect/generate/encode tools.
 
-Production: <https://decod.ing> · Staging: <https://decoding-v6-staging.wjstks3474.workers.dev>
+Production: <https://decod.ing> · Source: <https://github.com/whoo3474/decoding-v6> · Staging: <https://decoding-v6-staging.wjstks3474.workers.dev>
 
 ## Product contract
 

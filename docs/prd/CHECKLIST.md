@@ -126,7 +126,7 @@
 
 - [x] 2026-07-15 — `decod.ing/*`와 `www.decod.ing/*`를 새 정적 앱으로 전환 ([deployment](../implementation/DEPLOYMENT.md))
 - [ ] Show HN 게시·회고
-- [ ] MIT·SECURITY·CONTRIBUTING은 준비 완료; 새 Git remote/public repository 연결 필요
+- [x] 2026-07-15 — [GitHub engine 공개](https://github.com/whoo3474/decoding-v6), MIT·SECURITY·CONTRIBUTING·Private Vulnerability Reporting 구성
 - [ ] r/webdev → r/devops → r/netsec 순차, 동일 글 복제 금지
 - [ ] Search Console 색인·query·page completion 주간 검토
 
