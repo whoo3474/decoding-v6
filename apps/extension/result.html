@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>decod.ing local result</title>
+  </head>
+  <body>
+    <main>
+      <span class="status">LOCAL ONLY</span>
+      <h1>Selection result</h1>
+      <p id="summary">Reading the in-memory result…</p>
+      <pre><code id="output"></code></pre>
+      <button id="copy" type="button">Copy redacted result</button>
+      <p class="note">
+        The selected text was decoded in the extension service worker and was not persisted. Only
+        this redacted structure is held in session storage until this page reads and deletes it.
+      </p>
+    </main>
+    <script type="module" src="/src/result.ts"></script>
+  </body>
+</html>

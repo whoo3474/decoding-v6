@@ -1,0 +1,59 @@
+---
+import WebDecoder from '../islands/WebDecoder'
+import Layout from '../layouts/Layout.astro'
+---
+
+<Layout>
+  <section class="hero container">
+    <div class="hero-copy">
+      <span class="eyebrow hero-eyebrow">Zero-account universal decoder</span>
+      <h1>Paste anything.<br /><span>See what it is.</span></h1>
+      <p>
+        Detect opaque values, follow nested encoding layers, and inspect deterministic warnings.
+        Everything runs on this device.
+      </p>
+      <div class="hero-proof">
+        <span><strong>8</strong> smart detectors</span>
+        <span><strong>47</strong> local utilities</span>
+        <span><strong>0</strong> bytes uploaded</span>
+      </div>
+    </div>
+    <div class="hero-aside" aria-label="Product principles">
+      <div>
+        <span>01</span><strong>Auto-detect</strong><p>No format picker before you start.</p>
+      </div>
+      <div>
+        <span>02</span><strong>Recursive chain</strong><p>Base64 → gzip → JSON in one view.</p>
+      </div>
+      <div>
+        <span>03</span><strong>Honest confidence</strong><p>Ambiguous candidates stay visible.</p>
+      </div>
+    </div>
+  </section>
+  <div class="container workbench-wrap">
+    <WebDecoder client:only="preact" />
+  </div>
+  <section class="container value-section">
+    <div class="section-heading">
+      <span class="eyebrow">Built for sensitive debugging</span>
+      <h2>A local workbench, not another upload form.</h2>
+    </div>
+    <div class="value-grid">
+      <article>
+        <span class="value-index">A</span><h3>Format evidence</h3><p>
+          Every candidate shows confidence and the evidence that produced it.
+        </p>
+      </article>
+      <article>
+        <span class="value-index">B</span><h3>Deterministic warnings</h3><p>
+          Rules explain expired tokens, unverified signatures, and safety limits without an LLM.
+        </p>
+      </article>
+      <article>
+        <span class="value-index">C</span><h3>Purpose-built tools</h3><p>
+          Format, convert, inspect, generate, and encode with 47 dedicated local operations.
+        </p><a href="/tools/">Explore all tools →</a>
+      </article>
+    </div>
+  </section>
+</Layout>

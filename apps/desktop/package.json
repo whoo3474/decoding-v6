@@ -1,0 +1,33 @@
+{
+  "name": "@decoding/desktop",
+  "version": "6.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build:web": "vite build",
+    "build": "vite build",
+    "typecheck": "tsc --noEmit",
+    "tauri": "tauri"
+  },
+  "dependencies": {
+    "@decoding/engine": "workspace:*",
+    "@decoding/operations": "workspace:*",
+    "@decoding/workbench-ui": "workspace:*",
+    "@tauri-apps/api": "^2.8.0",
+    "@tauri-apps/plugin-autostart": "^2.5.0",
+    "@tauri-apps/plugin-clipboard-manager": "^2.3.0",
+    "@tauri-apps/plugin-dialog": "^2.4.0",
+    "@tauri-apps/plugin-global-shortcut": "^2.3.0",
+    "@tauri-apps/plugin-opener": "^2.5.0",
+    "@tauri-apps/plugin-process": "^2.3.0",
+    "@tauri-apps/plugin-updater": "^2.9.0",
+    "preact": "^10.27.0"
+  },
+  "devDependencies": {
+    "@preact/preset-vite": "^2.10.2",
+    "@tauri-apps/cli": "^2.8.4",
+    "typescript": "^5.8.3",
+    "vite": "^7.0.6"
+  }
+}

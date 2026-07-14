@@ -1,0 +1,39 @@
+---
+import Layout from '../layouts/Layout.astro'
+import { detectorSpecs } from '@decoding/spec-registry'
+---
+
+<Layout
+  title="Methodology — decod.ing"
+  description="How decod.ing detects formats, handles ambiguity, and enforces local safety limits."
+>
+  <article class="prose container">
+    <span class="eyebrow">Auditable method</span><h1>Confidence is evidence, not a guess.</h1>
+    <p class="lead">
+      Eight detector families score syntax, magic bytes, structure, and decoded output. A result
+      auto-expands only above 85% confidence with at least a 15-point lead.
+    </p>
+    <h2>Supported detector families</h2><ul>
+      {
+        detectorSpecs.map((spec) => (
+          <li>
+            <a href={`/detect/${spec.slug}/`}>{spec.label}</a> — {spec.description}
+          </li>
+        ))
+      }
+    </ul>
+    <h2>Recursive chain</h2><p>
+      A selected candidate can produce another local input. The engine follows up to 8 levels and 64
+      nodes while detecting cycles.
+    </p>
+    <h2>Safety limits</h2><p>
+      Input is capped at 10 MiB, expanded output at 32 MiB, compression at 100:1, and a local
+      operation at 2 seconds. Limits produce an explicit partial result rather than freezing the
+      page.
+    </p>
+    <h2>What decod.ing does not claim</h2><p>
+      Decoded JWT signatures are not verified without a trusted key. X.509 trust and revocation are
+      not validated. A high-confidence format match does not make the content trustworthy.
+    </p>
+  </article>
+</Layout>

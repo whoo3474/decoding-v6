@@ -1,0 +1,89 @@
+---
+import '../styles/global.css'
+
+interface Props {
+  title?: string
+  description?: string
+  canonical?: string
+  noindex?: boolean
+}
+
+const {
+  title = 'decod.ing — Universal local decoder',
+  description = 'Detect, decode, inspect, format, and convert developer data locally. 47 tools, no account, no upload.',
+  canonical = Astro.url.pathname,
+  noindex = false,
+} = Astro.props
+const canonicalUrl = new URL(canonical, Astro.site)
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="theme-color" content="#0d1020" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="application-version" content="6.0.0" />
+    <meta name="description" content={description} />
+    {noindex ? <meta name="robots" content="noindex" /> : null}
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={new URL('/og.svg', Astro.site)} />
+    <title>{title}</title>
+    <script
+      type="application/ld+json"
+      is:inline
+      set:html={JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'WebApplication',
+        name: 'decod.ing',
+        url: 'https://decod.ing',
+        applicationCategory: 'DeveloperApplication',
+        operatingSystem: 'Web, macOS, Windows, Linux',
+        offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+        description,
+      })}
+    />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="decod.ing home">
+        <span class="brand-mark" aria-hidden="true">d<span>/</span></span>
+        <span>decod<span class="brand-dot">.</span>ing</span>
+      </a>
+      <nav aria-label="Primary">
+        <a href="/tools/">Tools <span class="nav-count">47</span></a>
+        <a href="/methodology/">Method</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="/workspace/">Workspace</a>
+        <a href="/download/">Desktop</a>
+      </nav>
+      <div class="header-trust"><span class="privacy-dot"></span> Local only</div>
+    </header>
+    <main id="main"><slot /></main>
+    <footer class="site-footer">
+      <div>
+        <a class="brand footer-brand" href="/">decod<span class="brand-dot">.</span>ing</a>
+        <p>Developer data tools that stay on your device.</p>
+      </div>
+      <div class="footer-links">
+        <a href="/tools/">47 tools</a><a href="/privacy/">Privacy</a><a href="/methodology/"
+          >Methodology</a
+        ><a href="/changelog/">Changelog</a><a href="/about/">About</a>
+      </div>
+      <p class="footer-note">No account. No upload. No generative AI. No tracking ads.</p>
+    </footer>
+    <script>
+      if ('serviceWorker' in navigator && location.protocol === 'https:') {
+        addEventListener('load', () => navigator.serviceWorker.register('/sw.js'))
+      }
+    </script>
+  </body>
+</html>

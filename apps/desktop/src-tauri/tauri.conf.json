@@ -1,0 +1,53 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "decod.ing",
+  "version": "6.0.0",
+  "identifier": "ing.decod.desktop",
+  "build": {
+    "beforeDevCommand": "pnpm dev",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "pnpm build:web",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "security": {
+      "csp": "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; worker-src 'self' blob:; connect-src ipc: http://ipc.localhost; frame-src 'self' data: blob:; object-src 'none'; base-uri 'none'; form-action 'none'"
+    },
+    "windows": [
+      {
+        "label": "main",
+        "title": "decod.ing",
+        "width": 1180,
+        "height": 820,
+        "minWidth": 720,
+        "minHeight": 560,
+        "center": true,
+        "visible": true
+      }
+    ]
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "category": "DeveloperTool",
+    "shortDescription": "Universal local decoder and 47-tool workbench",
+    "longDescription": "Detect, decode, inspect, format, convert, and generate developer data locally without an account or upload.",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "createUpdaterArtifacts": true,
+    "macOS": { "minimumSystemVersion": "10.15", "signingIdentity": "-", "hardenedRuntime": true }
+  },
+  "plugins": {
+    "updater": {
+      "active": true,
+      "endpoints": ["https://decod.ing/releases/{{target}}/{{arch}}/{{current_version}}.json"],
+      "dialog": false,
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDczRTVEODJENkM4OEQ2MzQKUldRMDFvaHNMZGpsYzliTEluOEF3VnZaN09hNDFDWjIzZjIwejlPREhEbVZZWEozNnFuQVk1NU4K"
+    }
+  }
+}

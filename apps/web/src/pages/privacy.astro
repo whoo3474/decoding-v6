@@ -1,0 +1,33 @@
+---
+import Layout from '../layouts/Layout.astro'
+---
+
+<Layout
+  title="Privacy — decod.ing"
+  description="The precise local-only privacy boundary for decod.ing."
+>
+  <article class="prose container">
+    <span class="eyebrow">Privacy contract</span><h1>Your payload stays on your device.</h1>
+    <p class="lead">
+      decod.ing does not require an account and does not send raw input, decoded values, hashes,
+      file names, or exact payload lengths to a server.
+    </p>
+    <h2>What the application stores</h2><p>
+      By default: theme, locale, analytics consent, and recently used tool slugs only. Raw input and
+      results live in page or worker memory and are released when cleared or closed.
+    </p>
+    <h2>Network boundary</h2><p>
+      The initial product serves same-origin static assets only. There is no server decoder,
+      database, authentication, payment, AI endpoint, crash reporter, or advertising network.
+    </p>
+    <h2>Local limitations</h2><p>
+      A compromised browser, operating system, or extension can still observe content on your
+      device. Content you explicitly copy, export, or screenshot is under your control.
+    </p>
+    <h2>Desktop and CLI</h2><p>
+      The CLI has no network code. The desktop app reads the clipboard only after an explicit
+      shortcut or button and uses the network only when you manually request a signed update.
+    </p>
+    <p><a href="/methodology/">Read the detection and safety methodology →</a></p>
+  </article>
+</Layout>

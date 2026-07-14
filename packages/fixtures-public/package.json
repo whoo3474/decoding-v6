@@ -1,0 +1,16 @@
+{
+  "name": "@decoding/fixtures-public",
+  "version": "6.0.0",
+  "type": "module",
+  "exports": "./src/index.ts",
+  "scripts": {
+    "build": "tsc --noEmit",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "fflate": "^0.8.2"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
+}

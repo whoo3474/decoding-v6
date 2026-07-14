@@ -1,0 +1,33 @@
+---
+import Layout from '../layouts/Layout.astro'
+---
+
+<Layout
+  title="Desktop app — decod.ing"
+  description="Download the offline decod.ing desktop workbench for macOS, Windows, and Linux."
+>
+  <section class="page-hero container narrow">
+    <span class="eyebrow">Offline desktop workbench</span><h1>
+      One shortcut away from all 47 tools.
+    </h1><p>
+      The desktop shell adds an explicit global shortcut, one-time clipboard detection, local files,
+      multiple windows, and signed manual updates.
+    </p>
+  </section>
+  <section class="container download-grid">
+    <article>
+      <span class="platform">macOS</span><h2>Universal app</h2><p>
+        Apple Silicon and Intel. Notarized distribution is published after signing credentials and
+        beta gates are available.
+      </p><button class="button secondary" disabled>Signed build pending</button>
+    </article><article>
+      <span class="platform">Windows</span><h2>x64 / arm64</h2><p>
+        MSI/NSIS follows macOS stabilization and Windows code-signing verification.
+      </p><button class="button secondary" disabled>Quality gate pending</button>
+    </article><article>
+      <span class="platform">Linux</span><h2>AppImage / deb</h2><p>
+        Linux follows the macOS and Windows privacy and crash gates.
+      </p><button class="button secondary" disabled>Quality gate pending</button>
+    </article>
+  </section>
+</Layout>

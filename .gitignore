@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.astro/
+.wrangler/
+coverage/
+playwright-report/
+test-results/
+target/
+*.log
+.DS_Store
+.env
+.env.*
+!.env.example
+apps/desktop/src-tauri/gen/

@@ -1,0 +1,13 @@
+{
+  "name": "decod.ing — Local developer workbench",
+  "short_name": "decod.ing",
+  "description": "Universal local decoder and 47 privacy-first developer tools.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0c0d18",
+  "theme_color": "#0d1020",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

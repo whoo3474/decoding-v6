@@ -1,0 +1,13 @@
+{
+  "name": "@decoding/spec-registry",
+  "version": "6.0.0",
+  "type": "module",
+  "exports": "./src/index.ts",
+  "scripts": {
+    "build": "tsc --noEmit",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
+}

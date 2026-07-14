@@ -1,0 +1,12 @@
+{
+  "manifest_version": 3,
+  "name": "decod.ing — local selection decoder",
+  "version": "6.0.0",
+  "description": "Decode selected developer data locally without upload, account, ads, or telemetry.",
+  "permissions": ["contextMenus", "activeTab", "storage"],
+  "background": { "service_worker": "background.js", "type": "module" },
+  "action": { "default_title": "decod.ing" },
+  "content_security_policy": {
+    "extension_pages": "default-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'; connect-src 'none'"
+  }
+}

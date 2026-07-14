@@ -1,0 +1,19 @@
+name = "decoding-v6"
+compatibility_date = "2026-07-15"
+workers_dev = true
+preview_urls = true
+routes = [
+  { pattern = "decod.ing/*", zone_name = "decod.ing" },
+  { pattern = "www.decod.ing/*", zone_name = "decod.ing" },
+]
+
+[assets]
+directory = "apps/web/dist"
+not_found_handling = "404-page"
+
+[env.staging]
+name = "decoding-v6-staging"
+
+[env.staging.assets]
+directory = "apps/web/dist"
+not_found_handling = "404-page"

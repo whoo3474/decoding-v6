@@ -1,0 +1,17 @@
+---
+import { operations } from '@decoding/operations'
+import ToolSearch from '../islands/ToolSearch'
+import Layout from '../layouts/Layout.astro'
+---
+
+<Layout
+  title="47 local developer tools — decod.ing"
+  description="Format, convert, inspect, generate, encode, and decode with 47 privacy-first developer tools."
+>
+  <section class="page-hero container narrow">
+    <span class="eyebrow">Complete local catalog</span>
+    <h1>47 tools. One private workbench.</h1>
+    <p>Every tool runs on this device. Heavy parsers load only when you open them.</p>
+  </section>
+  <div class="container"><ToolSearch tools={operations} client:load /></div>
+</Layout>

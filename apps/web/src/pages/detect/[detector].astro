@@ -1,0 +1,56 @@
+---
+import { detectorSpecs } from '@decoding/spec-registry'
+import WebDecoder from '../../islands/WebDecoder'
+import Layout from '../../layouts/Layout.astro'
+
+export function getStaticPaths() {
+  return detectorSpecs.map((spec) => ({ params: { detector: spec.slug }, props: { spec } }))
+}
+
+const { spec } = Astro.props
+---
+
+<Layout
+  title={`${spec.label} detector — decod.ing`}
+  description={`${spec.description} Runs locally without upload.`}
+>
+  <section class="tool-hero container">
+    <div>
+      <a class="back-link" href="/methodology/">← Detection methodology</a><span class="eyebrow"
+        >Local detector</span
+      ><h1>{spec.label}</h1><p>{spec.description}</p>
+    </div>
+    <aside class="tool-trust-card">
+      <span class="privacy-dot"></span><strong>Evidence before guesses</strong><p>
+        Confidence and competing candidates stay visible. Detection never makes a network request.
+      </p>
+    </aside>
+  </section>
+  <div class="container workbench-wrap"><WebDecoder client:only="preact" /></div>
+  <section class="tool-content container">
+    <article>
+      <span class="eyebrow">Safe examples</span><h2>Try synthetic inputs</h2><ul>
+        {
+          spec.examples.map((example) => (
+            <li>
+              <code>{example}</code>
+            </li>
+          ))
+        }
+      </ul>
+    </article>
+    <article>
+      <span class="eyebrow">Specifications</span><h2>Detection references</h2><ul>
+        {
+          spec.references.map((reference) => (
+            <li>
+              <a href={reference.url} rel="external">
+                {reference.title}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </article>
+  </section>
+</Layout>

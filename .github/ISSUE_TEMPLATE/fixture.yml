@@ -1,0 +1,22 @@
+name: Synthetic fixture report
+description: Report a wrong or unsupported format without sharing sensitive data.
+body:
+  - type: markdown
+    attributes:
+      value: Never paste a real token, credential, certificate private key, or customer payload. Reproduce the shape with synthetic values.
+  - type: dropdown
+    id: result
+    attributes:
+      label: Result
+      options: [Unsupported, Wrong candidate, Ambiguous, Limit, Operation error]
+    validations: { required: true }
+  - type: textarea
+    id: synthetic
+    attributes:
+      label: Synthetic reproduction
+      description: A minimal non-sensitive value or deterministic generation steps.
+    validations: { required: true }
+  - type: textarea
+    id: expected
+    attributes: { label: Expected evidence and result }
+    validations: { required: true }

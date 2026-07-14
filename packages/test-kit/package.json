@@ -1,0 +1,21 @@
+{
+  "name": "@decoding/test-kit",
+  "version": "6.0.0",
+  "private": true,
+  "type": "module",
+  "exports": "./src/index.ts",
+  "scripts": {
+    "build": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@decoding/engine": "workspace:*",
+    "@decoding/fixtures-public": "workspace:*",
+    "@decoding/spec-registry": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
+  }
+}

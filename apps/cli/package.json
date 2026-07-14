@@ -1,0 +1,27 @@
+{
+  "name": "@decoding/cli",
+  "version": "6.0.0",
+  "type": "module",
+  "bin": {
+    "decoding": "dist/index.js"
+  },
+  "exports": "./dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "build": "tsup",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@decoding/engine": "workspace:*",
+    "@decoding/operations": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^24.1.0",
+    "tsup": "^8.5.0",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3"
+  }
+}

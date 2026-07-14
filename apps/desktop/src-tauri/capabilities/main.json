@@ -1,0 +1,24 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "main-capability",
+  "description": "Least-privilege capabilities for the decod.ing main window",
+  "windows": ["main"],
+  "permissions": [
+    "core:default",
+    "clipboard-manager:allow-read-text",
+    "clipboard-manager:allow-write-text",
+    "global-shortcut:allow-register",
+    "global-shortcut:allow-unregister",
+    "global-shortcut:allow-unregister-all",
+    "global-shortcut:allow-is-registered",
+    "dialog:allow-open",
+    "opener:allow-open-url",
+    "process:allow-restart",
+    "autostart:allow-enable",
+    "autostart:allow-disable",
+    "autostart:allow-is-enabled",
+    "updater:allow-check",
+    "updater:allow-download",
+    "updater:allow-install"
+  ]
+}

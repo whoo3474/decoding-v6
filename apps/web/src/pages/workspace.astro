@@ -1,0 +1,14 @@
+---
+import Layout from '../layouts/Layout.astro'
+import WorkspaceManager from '../islands/WorkspaceManager'
+---
+
+<Layout title="Local workspace — decod.ing" noindex>
+  <section class="page-hero container narrow">
+    <span class="eyebrow">Local workspace</span><h1>Redacted notes, stored only here.</h1><p>
+      Saving is always explicit. Scalars are removed before IndexedDB storage, records expire on
+      your schedule, and one action clears everything.
+    </p>
+  </section>
+  <div class="container"><WorkspaceManager client:only="preact" /></div>
+</Layout>
