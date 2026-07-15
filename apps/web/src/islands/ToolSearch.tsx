@@ -1,7 +1,16 @@
 import type { OperationDescriptor } from '@decoding/operations'
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks'
+import type { CatalogMessages } from '../i18n/catalog'
 
-export default function ToolSearch({ tools }: { tools: OperationDescriptor[] }) {
+export default function ToolSearch({
+  tools,
+  messages,
+  pathPrefix = '',
+}: {
+  tools: OperationDescriptor[]
+  messages: CatalogMessages
+  pathPrefix?: string
+}) {
   const [hydrated, setHydrated] = useState(false)
   const [query, setQuery] = useState('')
   const [favorites, setFavorites] = useState<string[]>([])
@@ -67,28 +76,28 @@ export default function ToolSearch({ tools }: { tools: OperationDescriptor[] }) 
   return (
     <div class="catalog-shell" data-hydrated={hydrated}>
       <label class="search-box">
-        <span>Search all 47 local tools</span>
+        <span>{messages.searchLabel}</span>
         <input
           type="search"
           ref={search}
           value={query}
           onInput={(event) => setQuery(event.currentTarget.value)}
-          placeholder="format JSON, inspect JWT, generate UUID…"
+          placeholder={messages.searchPlaceholder}
           autofocus
         />
       </label>
       <p class="catalog-count" aria-live="polite">
-        {visible.length} of {tools.length} tools
+        {visible.length} {messages.of} {tools.length} {messages.countSuffix}
       </p>
       {recentTools.length && !query ? (
         <section class="recent-tools" aria-labelledby="recent-tools">
           <div class="section-heading compact">
-            <span class="eyebrow">Stored slugs only</span>
-            <h2 id="recent-tools">Recent tools</h2>
+            <span class="eyebrow">{messages.recentEyebrow}</span>
+            <h2 id="recent-tools">{messages.recentTitle}</h2>
           </div>
           <div class="recent-links">
             {recentTools.map((tool) => (
-              <a href={`/${tool.id}/`} onClick={() => remember(tool.id)}>
+              <a href={`${pathPrefix}/${tool.id}/`} onClick={() => remember(tool.id)}>
                 {tool.name}
               </a>
             ))}
@@ -98,7 +107,7 @@ export default function ToolSearch({ tools }: { tools: OperationDescriptor[] }) 
       {[...groups.entries()].map(([category, items]) => (
         <section class="tool-group" aria-labelledby={`category-${category}`} key={category}>
           <div class="section-heading compact">
-            <span class="eyebrow">Category</span>
+            <span class="eyebrow">{messages.category}</span>
             <h2 id={`category-${category}`}>{category}</h2>
           </div>
           <div class="tool-grid">
@@ -109,11 +118,13 @@ export default function ToolSearch({ tools }: { tools: OperationDescriptor[] }) 
                     {tool.name.slice(0, 2).toUpperCase()}
                   </span>
                   <div class="tool-card-actions">
-                    <span class={`pack-badge pack-${tool.pack}`}>Pack {tool.pack}</span>
+                    <span class={`pack-badge pack-${tool.pack}`}>
+                      {messages.pack} {tool.pack}
+                    </span>
                     <button
                       class="favorite-button"
                       type="button"
-                      aria-label={`${favorites.includes(tool.id) ? 'Remove' : 'Add'} ${tool.name} ${favorites.includes(tool.id) ? 'from' : 'to'} favorites`}
+                      aria-label={`${favorites.includes(tool.id) ? messages.removeFavorite : messages.addFavorite}: ${tool.name}`}
                       aria-pressed={favorites.includes(tool.id)}
                       onClick={() => toggleFavorite(tool.id)}
                     >
@@ -121,19 +132,21 @@ export default function ToolSearch({ tools }: { tools: OperationDescriptor[] }) 
                     </button>
                   </div>
                 </div>
-                <a class="tool-card-link" href={`/${tool.id}/`} onClick={() => remember(tool.id)}>
+                <a
+                  class="tool-card-link"
+                  href={`${pathPrefix}/${tool.id}/`}
+                  onClick={() => remember(tool.id)}
+                >
                   <h3>{tool.name}</h3>
                   <p>{tool.description}</p>
-                  <span class="card-link">Open tool →</span>
+                  <span class="card-link">{messages.open}</span>
                 </a>
               </article>
             ))}
           </div>
         </section>
       ))}
-      {!visible.length ? (
-        <div class="empty-catalog">No matching tool. Try a format, action, or alias.</div>
-      ) : null}
+      {!visible.length ? <div class="empty-catalog">{messages.empty}</div> : null}
     </div>
   )
 }

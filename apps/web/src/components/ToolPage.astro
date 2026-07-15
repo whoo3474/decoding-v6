@@ -1,0 +1,70 @@
+---
+import type { OperationDescriptor } from '@decoding/operations'
+import { toolMessages } from '@decoding/workbench-ui'
+import WebTool from '../islands/WebTool'
+import Layout from '../layouts/Layout.astro'
+import SponsorSlot from './SponsorSlot.astro'
+import { localePath, toolPageMessages, type Locale } from '../i18n/catalog'
+
+interface Props {
+  locale: Locale
+  operation: OperationDescriptor
+}
+const { locale, operation } = Astro.props
+const messages = toolPageMessages[locale]
+const description = messages.description(operation.name)
+const routePath = `/${operation.id}/`
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: operation.name,
+  applicationCategory: 'DeveloperApplication',
+  operatingSystem: 'Web browser',
+  inLanguage: locale,
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  description,
+}
+const boundary =
+  operation.securityProfile === 'preview'
+    ? messages.previewBoundary
+    : operation.securityProfile === 'parser'
+      ? messages.parserBoundary
+      : messages.transformBoundary
+---
+
+<Layout
+  locale={locale}
+  title={`${operation.name} — decod.ing`}
+  description={description}
+  alternatePath={routePath}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />
+  <section class="tool-hero container">
+    <div>
+      <a class="back-link" href={localePath(locale, '/tools/')}>{messages.back}</a>
+      <span class="eyebrow">{messages.localUtility} · {messages.pack} {operation.pack}</span>
+      <h1>{operation.name}</h1>
+      <p>{description}</p>
+    </div>
+    <div class="tool-trust-card">
+      <span class="privacy-dot"></span><strong>{messages.runsHere}</strong><p>
+        {messages.trustBody}
+      </p>
+    </div>
+  </section>
+  <div class="container workbench-wrap">
+    <WebTool operation={operation} messages={toolMessages[locale]} client:only="preact" />
+  </div>
+  <SponsorSlot locale={locale} category={operation.category} />
+  <section class="container tool-content">
+    <article>
+      <span class="eyebrow">{messages.howEyebrow}</span><h2>{messages.howTitle}</h2>
+      <p>{messages.operationBody(operation.securityProfile)}</p>
+    </article>
+    <article>
+      <span class="eyebrow">{messages.boundaryEyebrow}</span><h2>{messages.boundaryTitle}</h2><p>
+        {boundary}
+      </p>
+    </article>
+  </section>
+</Layout>

@@ -1,0 +1,54 @@
+---
+import { detectorSpecs } from '@decoding/spec-registry'
+import Layout from '../layouts/Layout.astro'
+import { detectorPageMessages, localePath, type Locale } from '../i18n/catalog'
+import { infoMessages } from '../i18n/info'
+
+type InfoKey = 'methodology' | 'privacy' | 'about'
+interface Props {
+  locale: Locale
+  page: InfoKey
+}
+const { locale, page } = Astro.props
+const content = infoMessages[locale][page]
+const routePath = `/${page}/`
+---
+
+<Layout
+  locale={locale}
+  title={content.title}
+  description={content.description}
+  alternatePath={routePath}
+>
+  <article class="prose container">
+    <span class="eyebrow">{content.eyebrow}</span><h1>{content.heading}</h1>
+    <p class="lead">{content.lead}</p>
+    {
+      page === 'methodology' ? (
+        <ul>
+          {detectorSpecs.map((spec) => (
+            <li>
+              <a href={localePath(locale, `/detect/${spec.slug}/`)}>{spec.label}</a> —{' '}
+              {detectorPageMessages[locale].localDescription(spec.label)}
+            </li>
+          ))}
+        </ul>
+      ) : null
+    }
+    {
+      content.sections.map((section) => (
+        <>
+          <h2>{section.heading}</h2>
+          <p>{section.body}</p>
+        </>
+      ))
+    }
+    {
+      content.link ? (
+        <p>
+          <a href={localePath(locale, '/methodology/')}>{content.link}</a>
+        </p>
+      ) : null
+    }
+  </article>
+</Layout>

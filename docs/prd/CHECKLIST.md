@@ -95,7 +95,7 @@
 
 - [x] 2026-07-15 — `/`, 8 detector pages, `/methodology`, `/privacy`, `/about`, `/changelog`
 - [x] 2026-07-15 — canonical·sitemap·robots·JSON-LD·static OG
-- [ ] en message catalog와 UI literal lint는 locale 수요 gate 전에 구현
+- [x] 2026-07-15 — 8-locale typed message catalog·UI literal lint·key parity gate
 - [x] 2026-07-15 — aggregate event schema 전 privacy review 결과: launch telemetry 미구현
 - [ ] pageview/product event 없는 KPI beta 측정은 real participant 운영 시 실행
 
@@ -180,9 +180,11 @@
 완료 정의: 영어 제품의 유입·품질을 유지하며 증명된 로케일과 native 작업 동선만 확장.
 
 - [ ] 로케일 점수표: 8주 유입·검색 노출·요청·native reviewer
-- [ ] 첫 로케일: 8 tool + 공통 UI/privacy/methodology 100% 번역
-- [ ] hreflang/canonical/sitemap/screenshot/a11y 검증
-- [ ] 브라우저 언어 로컬 제안, 자동 redirect 없음
+- [x] 2026-07-15 — `en/ko/ja/zh-cn/es/pt-br/de/fr` 전체 공통 UI·47 tool·8 detector·privacy/methodology 기술 베타 라우트
+- [ ] 첫 로케일 native reviewer가 상위 8 tool + 공통 UI/privacy/methodology를 승인해 `noindex` 해제
+- [x] 2026-07-15 — self-canonical·English x-default·미검수 locale sitemap 제외·typed route build 검증
+- [ ] locale별 screenshot·screen-reader/native terminology review
+- [x] 2026-07-15 — 브라우저 언어 로케일 제안·session dismiss, 자동 redirect 없음
 
 ### 공유 utility catalog — Pack 2~4
 
@@ -236,10 +238,10 @@
 
 ### 정적 스폰서 우선
 
-- [ ] `AdSlot` 기본 `none`, 비활성 시 DOM·request 0개
-- [ ] `sponsors.json` schema·기간·HTTPS·asset 검사
-- [ ] same-origin raster asset, active SVG/HTML/JS 금지
-- [ ] below-the-fold 1자리·Sponsored 라벨·`rel=sponsored`
+- [x] 2026-07-15 — `SponsorSlot` 기본 `none`, 비활성 시 DOM·request 0개
+- [x] 2026-07-15 — `sponsors.json` schema·기간·HTTPS·asset 검사
+- [x] 2026-07-15 — same-origin raster asset, active SVG/HTML/JS 금지
+- [x] 2026-07-15 — below-the-fold 1자리·Sponsored 라벨·`rel=sponsored` 코드 게이트; active campaign 0개
 - [ ] 10% → 50% → 100% 품질 실험
 
 ### 네트워크 광고는 필요할 때만

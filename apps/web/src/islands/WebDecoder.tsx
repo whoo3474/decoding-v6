@@ -1,10 +1,11 @@
 import type { DecodeInput, DecodeResult } from '@decoding/engine'
 import { DecoderWorkbench } from '@decoding/workbench-ui'
+import type { DecoderMessages } from '@decoding/workbench-ui'
 import { useEffect, useMemo } from 'preact/hooks'
 
 type Pending = { resolve: (result: DecodeResult) => void; reject: (error: Error) => void }
 
-export default function WebDecoder() {
+export default function WebDecoder({ messages }: { messages: DecoderMessages }) {
   const client = useMemo(() => {
     const worker = new Worker(new URL('../workers/decoder.worker.ts', import.meta.url), {
       type: 'module',
@@ -32,5 +33,5 @@ export default function WebDecoder() {
     }
   }, [])
   useEffect(() => () => client.worker.terminate(), [client])
-  return <DecoderWorkbench decodeInput={client.decodeInput} />
+  return <DecoderWorkbench decodeInput={client.decodeInput} messages={messages} />
 }

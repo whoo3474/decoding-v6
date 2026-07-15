@@ -27,7 +27,7 @@ test('command palette focus, favorites, and recent tools store slugs only', asyn
   const search = page.getByPlaceholder(/format JSON/)
   await page.keyboard.press('Control+k')
   await expect(search).toBeFocused()
-  await page.getByRole('button', { name: 'Add JSON Format / Validate to favorites' }).click()
+  await page.getByRole('button', { name: /Add to favorites.*JSON Format \/ Validate/ }).click()
   const stored = await page.evaluate(() => ({
     favorites: localStorage.getItem('decoding-favorite-tools'),
     keys: Object.keys(localStorage),
@@ -58,4 +58,24 @@ test('renders HTML preview inside a locked sandbox', async ({ page }) => {
   const frame = page.locator('iframe.safe-preview')
   await expect(frame).toHaveAttribute('sandbox', '')
   await expect(frame).toHaveAttribute('srcdoc', /default-src 'none'/)
+})
+
+test.describe('Japanese locale', () => {
+  test.use({ locale: 'ja-JP' })
+
+  test('suggests Japanese without redirecting and runs the localized tool UI', async ({ page }) => {
+    await page.goto('/')
+    const suggestion = page.locator('#locale-suggestion')
+    await expect(page).toHaveURL('/')
+    await expect(suggestion).toBeVisible()
+    await expect(suggestion.getByRole('link', { name: 'Open' })).toHaveAttribute('href', '/ja/')
+
+    await page.goto('/ja/json-format/')
+    await expect(page.locator('html')).toHaveAttribute('lang', 'ja')
+    await expect(page.getByRole('button', { name: 'ローカルで実行' })).toBeVisible()
+    await expect(page.locator('link[rel="alternate"][hreflang="x-default"]')).toHaveAttribute(
+      'href',
+      'https://decod.ing/json-format/',
+    )
+  })
 })

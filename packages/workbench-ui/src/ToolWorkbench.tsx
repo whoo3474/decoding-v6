@@ -5,6 +5,7 @@ import type {
   OperationResult,
 } from '@decoding/operations'
 import { useEffect, useMemo, useState } from 'preact/hooks'
+import type { ToolMessages } from './messages'
 
 export type ToolWorkbenchProps = {
   operation: OperationDescriptor
@@ -13,6 +14,7 @@ export type ToolWorkbenchProps = {
     input: OperationInput,
     options?: OperationOptions,
   ) => Promise<OperationResult>
+  messages: ToolMessages
 }
 
 const examples: Record<string, string> = {
@@ -60,7 +62,7 @@ function resultText(result: OperationResult | null): string {
   return JSON.stringify(result.output, null, 2)
 }
 
-export function ToolWorkbench({ operation, execute }: ToolWorkbenchProps) {
+export function ToolWorkbench({ operation, execute, messages }: ToolWorkbenchProps) {
   const [hydrated, setHydrated] = useState(false)
   const [source, setSource] = useState(examples[operation.id] ?? '')
   const [options, setOptions] = useState<OperationOptions>(() => defaultOptions(operation))
@@ -73,7 +75,7 @@ export function ToolWorkbench({ operation, execute }: ToolWorkbenchProps) {
 
   const run = async (input: OperationInput = source, override = options) => {
     setStatus('processing')
-    setMessage('Running locally…')
+    setMessage(messages.runningMessage)
     try {
       const next = await execute(operation.id, input, override)
       setResult(next)
@@ -82,7 +84,7 @@ export function ToolWorkbench({ operation, execute }: ToolWorkbenchProps) {
     } catch (error) {
       setResult(null)
       setStatus('error')
-      setMessage(error instanceof Error ? error.message : 'Operation failed.')
+      setMessage(error instanceof Error ? error.message : messages.operationFailed)
     }
   }
 
@@ -90,7 +92,7 @@ export function ToolWorkbench({ operation, execute }: ToolWorkbenchProps) {
     if (!file) return
     if (file.size > 10 * 1024 * 1024) {
       setStatus('error')
-      setMessage('File exceeds the 10 MiB local limit.')
+      setMessage(messages.fileLimit)
       return
     }
     if (operation.id === 'qr-code' && file.type.startsWith('image/')) {
@@ -99,7 +101,7 @@ export function ToolWorkbench({ operation, execute }: ToolWorkbenchProps) {
       const context = canvas.getContext('2d')
       context?.drawImage(bitmap, 0, 0)
       const pixels = context?.getImageData(0, 0, bitmap.width, bitmap.height)
-      if (!pixels) throw new Error('Unable to read image pixels.')
+      if (!pixels) throw new Error(messages.imageReadFailed)
       const nextOptions = { ...options, mode: 'read', width: bitmap.width, height: bitmap.height }
       setOptions(nextOptions)
       await run(new Uint8Array(pixels.data), nextOptions)
@@ -118,15 +120,19 @@ export function ToolWorkbench({ operation, execute }: ToolWorkbenchProps) {
     setOptions((current) => ({ ...current, [key]: value }))
 
   return (
-    <section class="tool-workbench" data-hydrated={hydrated} aria-label={`${operation.name} tool`}>
+    <section
+      class="tool-workbench"
+      data-hydrated={hydrated}
+      aria-label={`${operation.name} ${messages.ariaSuffix}`}
+    >
       <div class="privacy-line">
         <span class="privacy-dot" aria-hidden="true" />
-        This operation runs locally. Input is never uploaded.
+        {messages.privacy}
       </div>
       <div class="tool-options">
         {operation.directions?.length ? (
           <label>
-            Direction
+            {messages.direction}
             <select
               value={String(options.mode ?? '')}
               onChange={(event) => setOption('mode', event.currentTarget.value)}
@@ -140,7 +146,7 @@ export function ToolWorkbench({ operation, execute }: ToolWorkbenchProps) {
         {operation.id === 'number-base' ? (
           <>
             <label>
-              From base
+              {messages.fromBase}
               <input
                 type="number"
                 min="2"
@@ -150,7 +156,7 @@ export function ToolWorkbench({ operation, execute }: ToolWorkbenchProps) {
               />
             </label>
             <label>
-              To base
+              {messages.toBase}
               <input
                 type="number"
                 min="2"
@@ -164,14 +170,14 @@ export function ToolWorkbench({ operation, execute }: ToolWorkbenchProps) {
         {operation.id === 'regex-tester' ? (
           <>
             <label>
-              Pattern
+              {messages.pattern}
               <input
                 value={String(options.pattern)}
                 onInput={(event) => setOption('pattern', event.currentTarget.value)}
               />
             </label>
             <label>
-              Flags
+              {messages.flags}
               <input
                 value={String(options.flags)}
                 onInput={(event) => setOption('flags', event.currentTarget.value)}
@@ -181,7 +187,7 @@ export function ToolWorkbench({ operation, execute }: ToolWorkbenchProps) {
         ) : null}
         {operation.id === 'text-diff' ? (
           <label class="wide">
-            Compare with
+            {messages.compareWith}
             <textarea
               value={String(options.compareTo)}
               onInput={(event) => setOption('compareTo', event.currentTarget.value)}
@@ -190,7 +196,7 @@ export function ToolWorkbench({ operation, execute }: ToolWorkbenchProps) {
         ) : null}
         {operation.id === 'uuid-ulid-generator' ? (
           <label>
-            Kind
+            {messages.kind}
             <select
               value={String(options.kind)}
               onChange={(event) => setOption('kind', event.currentTarget.value)}
@@ -203,7 +209,7 @@ export function ToolWorkbench({ operation, execute }: ToolWorkbenchProps) {
         ) : null}
         {operation.id === 'hash-generator' ? (
           <label>
-            Algorithm
+            {messages.algorithm}
             <select
               value={String(options.algorithm)}
               onChange={(event) => setOption('algorithm', event.currentTarget.value)}
@@ -218,7 +224,7 @@ export function ToolWorkbench({ operation, execute }: ToolWorkbenchProps) {
         ) : null}
         {operation.id === 'curl-to-code' ? (
           <label>
-            Language
+            {messages.language}
             <select
               value={String(options.language)}
               onChange={(event) => setOption('language', event.currentTarget.value)}
@@ -247,7 +253,7 @@ export function ToolWorkbench({ operation, execute }: ToolWorkbenchProps) {
         ) : null}
         {operation.id === 'json-to-code' ? (
           <label>
-            Language
+            {messages.language}
             <select
               value={String(options.language)}
               onChange={(event) => setOption('language', event.currentTarget.value)}
@@ -262,7 +268,7 @@ export function ToolWorkbench({ operation, execute }: ToolWorkbenchProps) {
         ) : null}
         {operation.id === 'string-case' ? (
           <label>
-            Case
+            {messages.caseLabel}
             <select
               value={String(options.mode)}
               onChange={(event) => setOption('mode', event.currentTarget.value)}
@@ -289,11 +295,11 @@ export function ToolWorkbench({ operation, execute }: ToolWorkbenchProps) {
         <div class="operation-pane">
           <div class="panel-heading">
             <div>
-              <span class="eyebrow">Input</span>
+              <span class="eyebrow">{messages.input}</span>
               <h2>{operation.name}</h2>
             </div>
             <label class="button secondary small">
-              File
+              {messages.file}
               <input
                 class="visually-hidden"
                 type="file"
@@ -305,7 +311,7 @@ export function ToolWorkbench({ operation, execute }: ToolWorkbenchProps) {
             value={source}
             onInput={(event) => setSource(event.currentTarget.value)}
             spellcheck={false}
-            placeholder="Enter input…"
+            placeholder={messages.enterInput}
           />
           <div class="input-actions">
             <button
@@ -314,18 +320,18 @@ export function ToolWorkbench({ operation, execute }: ToolWorkbenchProps) {
               onClick={() => void run()}
               disabled={status === 'processing'}
             >
-              {status === 'processing' ? 'Running…' : 'Run locally'}
+              {status === 'processing' ? messages.running : messages.runLocally}
             </button>
             <button class="button ghost" type="button" onClick={() => setSource('')}>
-              Clear
+              {messages.clear}
             </button>
           </div>
         </div>
         <div class="operation-pane output-pane">
           <div class="panel-heading">
             <div>
-              <span class="eyebrow">Output</span>
-              <h2>{result?.kind ?? 'Ready'}</h2>
+              <span class="eyebrow">{messages.output}</span>
+              <h2>{result?.kind ?? messages.ready}</h2>
             </div>
             <button
               class="button small"
@@ -333,7 +339,7 @@ export function ToolWorkbench({ operation, execute }: ToolWorkbenchProps) {
               disabled={!result}
               onClick={() => void navigator.clipboard.writeText(output)}
             >
-              Copy
+              {messages.copy}
             </button>
           </div>
           {result?.kind === 'preview' ? (
@@ -341,18 +347,22 @@ export function ToolWorkbench({ operation, execute }: ToolWorkbenchProps) {
               class="safe-preview"
               sandbox=""
               srcdoc={String(result.output)}
-              title="Sandboxed local preview"
+              title={messages.sandboxTitle}
             />
           ) : result?.kind === 'image' ? (
-            <img class="generated-image" src={String(result.output)} alt="Generated QR code" />
+            <img
+              class="generated-image"
+              src={String(result.output)}
+              alt={messages.generatedQrAlt}
+            />
           ) : (
             <pre class="output-view">
-              <code>{output || 'Run the tool to see local output.'}</code>
+              <code>{output || messages.emptyOutput}</code>
             </pre>
           )}
           {result ? (
             <button class="button ghost small" type="button" onClick={() => setSource(output)}>
-              Use as input
+              {messages.useAsInput}
             </button>
           ) : null}
         </div>

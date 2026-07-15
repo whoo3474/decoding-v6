@@ -1,0 +1,18 @@
+---
+import { operations, type OperationDescriptor } from '@decoding/operations'
+import ToolPage from '../../components/ToolPage.astro'
+import { localizedLocales, type Locale } from '../../i18n/catalog'
+
+export function getStaticPaths() {
+  return localizedLocales.flatMap((locale) =>
+    operations.map((operation) => ({
+      params: { locale, tool: operation.id },
+      props: { locale, operation },
+    })),
+  )
+}
+
+const { locale, operation } = Astro.props as { locale: Locale; operation: OperationDescriptor }
+---
+
+<ToolPage locale={locale} operation={operation} />

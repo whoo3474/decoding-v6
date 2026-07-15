@@ -19,7 +19,9 @@ See [DEPLOYMENT.md](./DEPLOYMENT.md) for route, version, HTTP, browser, privacy-
 - 8 detector families, recursive chain, confidence/margin selection, cycle and resource limits
 - 20 positive + 10 edge + 20 negative public fixtures per detector; official specification registry and per-format public quality gate
 - 47/47 DevUtils-audited tools, route/search/help/runtime parity, valid fixture for every operation, parser/preview malicious fixtures
-- 64-page static web build, responsive light/dark UI, automated serious-impact axe gate, PWA offline cache
+- 484-page static web build: English plus 7 translation-beta locales across 47 tools, 8 detectors, home, privacy, methodology, and about
+- typed `en/ko/ja/zh-cn/es/pt-br/de/fr` workbench catalogs, locale suggestions without redirects, self-canonical pages, and native-review `noindex` gates
+- responsive light/dark UI, automated serious-impact axe gate, PWA offline cache
 - explicit redacted-only IndexedDB workspace with TTL, export preview, per-record deletion, and clear-all
 - stdin/file-only CLI, local Tauri app, and minimum-permission MV3 extension
 - zero product analytics, account, payment, server decode, advertising, or payload network primitives
@@ -36,6 +38,9 @@ The user explicitly requested implementation of the complete 47-tool, desktop, a
 - initial application JavaScript: 18.8 KiB gzip; heavy operation categories remain lazy
 - Tauri: Rust `cargo check`, native release bundle, updater signing, checksums, code-sign verification, capability allowlist, and two-minute no-socket runtime observation
 - Cloudflare: staging, production, custom-domain cutover, external Chromium smoke/privacy gate, and rollback/restore drill
+- Cloudflare immutable i18n preview: `f9ad317e-1204-42b9-82ad-d9afd1ff8c74` at `https://codex-i18n-decoding-v6.wjstks3474.workers.dev`
+- PR preview workflow and repository variables are configured; the dedicated minimal Cloudflare API token remains an owner-authenticated dashboard action
+- sponsor adapter defaults to none and validates same-origin raster assets, HTTPS targets, dates, categories, and forbidden payload/session query keys
 
 ## Desktop artifacts
 
@@ -57,6 +62,7 @@ The private updater key is outside the repository. The public key is in Tauri co
 - Show HN, subreddit, and extension-store launch activities
 - Apple Developer ID signing/notarization and macOS universal release require owner credentials; Windows/Linux packages require a connected release workflow
 - full manual WCAG 2.2 AA audit and real-user assistive-technology verification
-- PR preview environment requires the repository to be connected to a Git remote/CI host
+- PR preview workflow needs a dedicated `CLOUDFLARE_API_TOKEN`; the local expiring OAuth session was deliberately not copied into GitHub Secrets
+- all 7 non-English locales are labeled translation beta and excluded from indexing until native technical/privacy review
 
 These gates remain unchecked in [CHECKLIST.md](../prd/CHECKLIST.md). No ad slot or ad request exists until Phase 4 evidence is real.

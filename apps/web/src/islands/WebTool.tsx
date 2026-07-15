@@ -5,11 +5,18 @@ import type {
   OperationResult,
 } from '@decoding/operations'
 import { ToolWorkbench } from '@decoding/workbench-ui'
+import type { ToolMessages } from '@decoding/workbench-ui'
 import { useEffect, useMemo } from 'preact/hooks'
 
 type Pending = { resolve: (result: OperationResult) => void; reject: (error: Error) => void }
 
-export default function WebTool({ operation }: { operation: OperationDescriptor }) {
+export default function WebTool({
+  operation,
+  messages,
+}: {
+  operation: OperationDescriptor
+  messages: ToolMessages
+}) {
   const client = useMemo(() => {
     const worker = new Worker(new URL('../workers/operation.worker.ts', import.meta.url), {
       type: 'module',
@@ -37,5 +44,5 @@ export default function WebTool({ operation }: { operation: OperationDescriptor 
     }
   }, [])
   useEffect(() => () => client.worker.terminate(), [client])
-  return <ToolWorkbench operation={operation} execute={client.execute} />
+  return <ToolWorkbench operation={operation} execute={client.execute} messages={messages} />
 }

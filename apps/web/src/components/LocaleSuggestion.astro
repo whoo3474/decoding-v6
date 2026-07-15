@@ -1,0 +1,61 @@
+---
+import { localeNames } from '../i18n/catalog'
+interface Props {
+  path: string
+}
+const { path } = Astro.props
+---
+
+<aside
+  class="locale-suggestion"
+  id="locale-suggestion"
+  data-path={path}
+  data-names={JSON.stringify(localeNames)}
+  hidden
+>
+  <span>Available in <strong data-locale-name></strong>.</span>
+  <a class="button primary small" data-locale-link>Open</a>
+  <button class="button ghost small" type="button" data-locale-dismiss>Not now</button>
+</aside>
+<script>
+  const suggestion = document.querySelector<HTMLElement>('#locale-suggestion')
+  if (suggestion && !sessionStorage.getItem('decoding-locale-suggestion-dismissed')) {
+    const languages = navigator.languages.length ? navigator.languages : [navigator.language]
+    const locale = languages
+      .map((language) => language.toLowerCase())
+      .map((language) =>
+        language.startsWith('ko')
+          ? 'ko'
+          : language.startsWith('ja')
+            ? 'ja'
+            : language.startsWith('zh')
+              ? 'zh-cn'
+              : language.startsWith('es')
+                ? 'es'
+                : language.startsWith('pt')
+                  ? 'pt-br'
+                  : language.startsWith('de')
+                    ? 'de'
+                    : language.startsWith('fr')
+                      ? 'fr'
+                      : undefined,
+      )
+      .find(Boolean)
+    if (locale) {
+      const names = JSON.parse(suggestion.dataset.names ?? '{}') as Record<string, string>
+      const name = suggestion.querySelector<HTMLElement>('[data-locale-name]')
+      const link = suggestion.querySelector<HTMLAnchorElement>('[data-locale-link]')
+      const dismiss = suggestion.querySelector<HTMLButtonElement>('[data-locale-dismiss]')
+      if (name && link && dismiss) {
+        name.textContent = names[locale] ?? locale
+        link.href = `/${locale}${suggestion.dataset.path ?? '/'}`
+        link.hreflang = locale
+        suggestion.hidden = false
+        dismiss.addEventListener('click', () => {
+          suggestion.hidden = true
+          sessionStorage.setItem('decoding-locale-suggestion-dismissed', '1')
+        })
+      }
+    }
+  }
+</script>

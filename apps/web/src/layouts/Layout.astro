@@ -1,11 +1,24 @@
 ---
 import '../styles/global.css'
+import {
+  layoutMessages,
+  indexedLocales,
+  localeNames,
+  localePath,
+  supportedLocales,
+  type Locale,
+} from '../i18n/catalog'
+import LocaleSuggestion from '../components/LocaleSuggestion.astro'
 
 interface Props {
   title?: string
   description?: string
   canonical?: string
   noindex?: boolean
+  locale?: Locale
+  alternatePath?: string
+  englishPath?: string
+  koreanPath?: string
 }
 
 const {
@@ -13,12 +26,22 @@ const {
   description = 'Detect, decode, inspect, format, and convert developer data locally. 47 tools, no account, no upload.',
   canonical = Astro.url.pathname,
   noindex = false,
+  locale = 'en',
+  alternatePath,
+  englishPath,
 } = Astro.props
 const canonicalUrl = new URL(canonical, Astro.site)
+const messages = layoutMessages[locale]
+const preventIndexing = noindex || !indexedLocales.includes(locale)
+const translationPath = alternatePath ?? englishPath
+const localizedHome = localePath(locale)
+const localizedTools = localePath(locale, '/tools/')
+const localizedMethod = localePath(locale, '/methodology/')
+const localizedPrivacy = localePath(locale, '/privacy/')
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={locale}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
@@ -26,8 +49,24 @@ const canonicalUrl = new URL(canonical, Astro.site)
     <meta name="color-scheme" content="light dark" />
     <meta name="application-version" content="6.0.0" />
     <meta name="description" content={description} />
-    {noindex ? <meta name="robots" content="noindex" /> : null}
+    {preventIndexing ? <meta name="robots" content="noindex,follow" /> : null}
     <link rel="canonical" href={canonicalUrl} />
+    {
+      translationPath
+        ? indexedLocales.map((targetLocale) => (
+            <link
+              rel="alternate"
+              hreflang={targetLocale}
+              href={new URL(localePath(targetLocale, translationPath), Astro.site)}
+            />
+          ))
+        : null
+    }
+    {
+      translationPath ? (
+        <link rel="alternate" hreflang="x-default" href={new URL(translationPath, Astro.site)} />
+      ) : null
+    }
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="manifest" href="/manifest.webmanifest" />
     <meta property="og:title" content={title} />
@@ -52,33 +91,58 @@ const canonicalUrl = new URL(canonical, Astro.site)
     />
   </head>
   <body>
-    <a class="skip-link" href="#main">Skip to content</a>
+    <a class="skip-link" href="#main">{messages.skip}</a>
     <header class="site-header">
-      <a class="brand" href="/" aria-label="decod.ing home">
+      <a class="brand" href={localizedHome} aria-label={messages.home}>
         <span class="brand-mark" aria-hidden="true">d<span>/</span></span>
         <span>decod<span class="brand-dot">.</span>ing</span>
       </a>
-      <nav aria-label="Primary">
-        <a href="/tools/">Tools <span class="nav-count">47</span></a>
-        <a href="/methodology/">Method</a>
-        <a href="/privacy/">Privacy</a>
-        <a href="/workspace/">Workspace</a>
-        <a href="/download/">Desktop</a>
+      <nav aria-label={messages.primary}>
+        <a href={localizedTools}>{messages.tools} <span class="nav-count">47</span></a>
+        <a href={localizedMethod}>{messages.method}</a>
+        <a href={localizedPrivacy}>{messages.privacy}</a>
+        {locale === 'en' ? <a href="/workspace/">{messages.workspace}</a> : null}
+        {locale === 'en' ? <a href="/download/">{messages.desktop}</a> : null}
       </nav>
-      <div class="header-trust"><span class="privacy-dot"></span> Local only</div>
+      {
+        translationPath ? (
+          <details class="language-menu">
+            <summary aria-label={messages.language}>{localeNames[locale]}</summary>
+            <div class="language-options">
+              {supportedLocales.map((targetLocale) => (
+                <a
+                  href={localePath(targetLocale, translationPath)}
+                  hreflang={targetLocale}
+                  lang={targetLocale}
+                  aria-current={targetLocale === locale ? 'page' : undefined}
+                >
+                  {localeNames[targetLocale]}
+                </a>
+              ))}
+            </div>
+          </details>
+        ) : null
+      }
+      {locale !== 'en' ? <span class="translation-status">{messages.translationBeta}</span> : null}
+      <div class="header-trust"><span class="privacy-dot"></span> {messages.localOnly}</div>
     </header>
+    {locale === 'en' && translationPath ? <LocaleSuggestion path={translationPath} /> : null}
     <main id="main"><slot /></main>
     <footer class="site-footer">
       <div>
-        <a class="brand footer-brand" href="/">decod<span class="brand-dot">.</span>ing</a>
-        <p>Developer data tools that stay on your device.</p>
+        <a class="brand footer-brand" href={localizedHome}
+          >decod<span class="brand-dot">.</span>ing</a
+        >
+        <p>{messages.footer}</p>
       </div>
       <div class="footer-links">
-        <a href="/tools/">47 tools</a><a href="/privacy/">Privacy</a><a href="/methodology/"
-          >Methodology</a
-        ><a href="/changelog/">Changelog</a><a href="/about/">About</a>
+        <a href={localizedTools}>47 {messages.tools}</a><a href={localizedPrivacy}
+          >{messages.privacy}</a
+        ><a href={localizedMethod}>{messages.method}</a><a href="/changelog/"
+          >{messages.changelog}</a
+        ><a href={localePath(locale, '/about/')}>{messages.about}</a>
       </div>
-      <p class="footer-note">No account. No upload. No generative AI. No tracking ads.</p>
+      <p class="footer-note">{messages.footerNote}</p>
     </footer>
     <script>
       if ('serviceWorker' in navigator && location.protocol === 'https:') {

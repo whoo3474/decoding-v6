@@ -1,5 +1,5 @@
 import type { DecodeInput, DecodeResult } from '@decoding/engine'
-import { DecoderWorkbench } from '@decoding/workbench-ui'
+import { DecoderWorkbench, decoderMessages } from '@decoding/workbench-ui'
 import { useEffect, useMemo } from 'preact/hooks'
 
 export default function EngineWorkbench({
@@ -37,5 +37,11 @@ export default function EngineWorkbench({
     }
   }, [])
   useEffect(() => () => client.worker.terminate(), [client])
-  return <DecoderWorkbench decodeInput={client.decodeInput} externalInput={externalInput} />
+  return (
+    <DecoderWorkbench
+      decodeInput={client.decodeInput}
+      externalInput={externalInput}
+      messages={decoderMessages.en}
+    />
+  )
 }

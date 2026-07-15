@@ -1,0 +1,68 @@
+---
+import type { DetectorSpec } from '@decoding/spec-registry'
+import { decoderMessages } from '@decoding/workbench-ui'
+import WebDecoder from '../islands/WebDecoder'
+import Layout from '../layouts/Layout.astro'
+import { detectorPageMessages, localePath, type Locale } from '../i18n/catalog'
+
+interface Props {
+  locale: Locale
+  spec: DetectorSpec
+}
+const { locale, spec } = Astro.props
+const messages = detectorPageMessages[locale]
+const description = messages.localDescription(spec.label)
+const routePath = `/detect/${spec.slug}/`
+---
+
+<Layout
+  locale={locale}
+  title={`${spec.label} — decod.ing`}
+  description={description}
+  alternatePath={routePath}
+>
+  <section class="tool-hero container">
+    <div>
+      <a class="back-link" href={localePath(locale, '/methodology/')}>{messages.back}</a>
+      <span class="eyebrow">{messages.eyebrow}</span>
+      <h1>{spec.label}</h1>
+      <p>{description}</p>
+    </div>
+    <aside class="tool-trust-card">
+      <span class="privacy-dot"></span><strong>{messages.evidenceTitle}</strong><p>
+        {messages.evidenceBody}
+      </p>
+    </aside>
+  </section>
+  <div class="container workbench-wrap">
+    <WebDecoder messages={decoderMessages[locale]} client:only="preact" />
+  </div>
+  <section class="tool-content container">
+    <article>
+      <span class="eyebrow">{messages.examplesEyebrow}</span><h2>{messages.examplesTitle}</h2><ul>
+        {
+          spec.examples.map((example) => (
+            <li>
+              <code>{example}</code>
+            </li>
+          ))
+        }
+      </ul>
+    </article>
+    <article>
+      <span class="eyebrow">{messages.referencesEyebrow}</span><h2>
+        {messages.referencesTitle}
+      </h2><ul>
+        {
+          spec.references.map((reference) => (
+            <li>
+              <a href={reference.url} rel="external">
+                {reference.title}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </article>
+  </section>
+</Layout>

@@ -1,0 +1,60 @@
+name: Cloudflare PR preview
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  preview:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 10.15.0 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @decoding/web build
+      - name: Upload immutable Worker version
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          command: versions upload --env="" --preview-alias pr-${{ github.event.pull_request.number }}
+      - name: Publish preview URL
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const marker = '<!-- decoding-cloudflare-preview -->'
+            const url = `https://pr-${context.issue.number}-decoding-v6.${{ vars.CLOUDFLARE_WORKERS_SUBDOMAIN }}.workers.dev`
+            const body = `${marker}\nCloudflare preview: ${url}\n\nThis immutable version is isolated from production traffic.`
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            })
+            const previous = comments.find((comment) => comment.body?.includes(marker))
+            if (previous) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: previous.id,
+                body,
+              })
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              })
+            }

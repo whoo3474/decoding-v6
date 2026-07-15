@@ -5,7 +5,12 @@ import { defineConfig } from 'astro/config'
 export default defineConfig({
   site: 'https://decod.ing',
   output: 'static',
-  integrations: [preact(), sitemap()],
+  integrations: [
+    preact(),
+    sitemap({
+      filter: (page) => !/^https:\/\/decod\.ing\/(?:ko|ja|zh-cn|es|pt-br|de|fr)(?:\/|$)/.test(page),
+    }),
+  ],
   build: {
     inlineStylesheets: 'auto',
   },

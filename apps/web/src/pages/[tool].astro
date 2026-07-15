@@ -1,65 +1,12 @@
 ---
 import { operations, type OperationDescriptor } from '@decoding/operations'
-import WebTool from '../islands/WebTool'
-import Layout from '../layouts/Layout.astro'
+import ToolPage from '../components/ToolPage.astro'
 
 export function getStaticPaths() {
   return operations.map((operation) => ({ params: { tool: operation.id }, props: { operation } }))
 }
 
 const { operation } = Astro.props as { operation: OperationDescriptor }
-const schema = {
-  '@context': 'https://schema.org',
-  '@type': 'SoftwareApplication',
-  name: operation.name,
-  applicationCategory: 'DeveloperApplication',
-  operatingSystem: 'Web browser',
-  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-  description: operation.description,
-}
 ---
 
-<Layout
-  title={`${operation.name} — local, free, no upload | decod.ing`}
-  description={`${operation.description} Runs locally with no account or upload.`}
->
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />
-  <section class="tool-hero container">
-    <div>
-      <a class="back-link" href="/tools/">← All 47 tools</a>
-      <span class="eyebrow">{operation.category} · Utility Pack {operation.pack}</span>
-      <h1>{operation.name}</h1>
-      <p>{operation.description}</p>
-    </div>
-    <div class="tool-trust-card">
-      <span class="privacy-dot"></span>
-      <strong>Runs on this device</strong>
-      <p>No account, upload, telemetry, or server processing.</p>
-    </div>
-  </section>
-  <div class="container workbench-wrap"><WebTool operation={operation} client:only="preact" /></div>
-  <section class="container tool-content">
-    <article>
-      <span class="eyebrow">How it works</span>
-      <h2>Purpose-built and deterministic.</h2>
-      <p>
-        The input is passed to a local <code>{operation.securityProfile}</code> operation inside a dedicated
-        Web Worker. The result is returned to this page only and is not placed in a URL, request, log,
-        or analytics event.
-      </p>
-    </article>
-    <article>
-      <span class="eyebrow">Safety boundary</span>
-      <h2>Input is data, never authority.</h2>
-      <p>
-        {
-          operation.securityProfile === 'preview'
-            ? 'Preview output is rendered in a sandbox with scripts, forms, navigation, downloads, and network blocked.'
-            : operation.securityProfile === 'parser'
-              ? 'The parser has bounded input and cannot execute templates, commands, files, or network calls.'
-              : 'The operation is a pure local transformation with no OS or network capability.'
-        }
-      </p>
-    </article>
-  </section>
-</Layout>
+<ToolPage locale="en" operation={operation} />

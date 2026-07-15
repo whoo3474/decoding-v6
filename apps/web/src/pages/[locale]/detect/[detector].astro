@@ -1,0 +1,18 @@
+---
+import { detectorSpecs, type DetectorSpec } from '@decoding/spec-registry'
+import DetectorPage from '../../../components/DetectorPage.astro'
+import { localizedLocales, type Locale } from '../../../i18n/catalog'
+
+export function getStaticPaths() {
+  return localizedLocales.flatMap((locale) =>
+    detectorSpecs.map((spec) => ({
+      params: { locale, detector: spec.slug },
+      props: { locale, spec },
+    })),
+  )
+}
+
+const { locale, spec } = Astro.props as { locale: Locale; spec: DetectorSpec }
+---
+
+<DetectorPage locale={locale} spec={spec} />

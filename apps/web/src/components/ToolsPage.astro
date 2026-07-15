@@ -1,0 +1,29 @@
+---
+import { operations } from '@decoding/operations'
+import ToolSearch from '../islands/ToolSearch'
+import Layout from '../layouts/Layout.astro'
+import { catalogMessages, type Locale } from '../i18n/catalog'
+
+interface Props {
+  locale: Locale
+}
+const { locale } = Astro.props
+const messages = catalogMessages[locale]
+const pathPrefix = locale === 'en' ? '' : `/${locale}`
+---
+
+<Layout
+  locale={locale}
+  title={messages.title}
+  description={messages.description}
+  alternatePath="/tools/"
+>
+  <section class="page-hero container narrow">
+    <span class="eyebrow">{messages.eyebrow}</span>
+    <h1>{messages.heading}</h1>
+    <p>{messages.lead}</p>
+  </section>
+  <div class="container">
+    <ToolSearch tools={operations} messages={messages} pathPrefix={pathPrefix} client:load />
+  </div>
+</Layout>

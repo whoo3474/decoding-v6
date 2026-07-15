@@ -66,6 +66,19 @@
 
 ## 6. 로케일 승격 게이트
 
+### 6.1 2026-07-15 사용자 지시에 따른 기술 베타 선행
+
+사용자가 일본어를 포함해 가능한 범위의 국제화를 선행하도록 명시했다. 따라서 수요 데이터를 기다리지 않고 다음 8개 로케일의 정적 라우트·도구 UI·오류·privacy·methodology 초안을 구현한다.
+
+| 상태 | 로케일 | 운영 경계 |
+|---|---|---|
+| 기본 | `en` | 색인·`hreflang`·sitemap 포함 |
+| 핵심 기술 베타 | `ko`, `ja` | 전체 공통 UI와 핵심 문서 초안, native review 전 `noindex` |
+| 확장 기술 베타 | `zh-cn`, `es`, `pt-br`, `de`, `fr` | 전체 공통 UI·도구 라우트와 핵심 안전 문서 초안, native review 전 `noindex` |
+| 후보 | `hi`, `id`, `ru`, `ar` | 현재 8개 로케일의 용어 검수·실사용 결과 후 순차 확장 |
+
+기술 베타는 사용자가 직접 열고 실행할 수 있지만 `Translation beta`를 명시하고 자동 redirect하지 않는다. Native reviewer가 용어·예시·privacy 정확성을 승인하기 전에는 검색 색인·sitemap·`hreflang` 집합에 승격하지 않는다.
+
 첫 로케일은 다음 점수로 선택한다.
 
 - 최근 8주 국가/브라우저 언어 aggregate 유입
@@ -96,7 +109,7 @@ en message/content 변경
 - message key는 의미 기반, 영어 문장 자체를 key로 쓰지 않음
 - UI와 긴 tool content catalog를 분리
 - detector/spec registry의 기술 값은 번역하지 않음
-- machine translation만으로 production 공개 금지
+- machine/AI-assisted translation만으로 검색 색인 로케일에 승격 금지; 미검수 기술 베타는 명시적 라벨·`noindex`를 유지
 
 ## 8. 광고 국제화
 

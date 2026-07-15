@@ -1,5 +1,5 @@
 import { operations, executeOperation, type OperationDescriptor } from '@decoding/operations'
-import { ToolWorkbench } from '@decoding/workbench-ui'
+import { ToolWorkbench, toolMessages } from '@decoding/workbench-ui'
 import { getCurrentWindow } from '@tauri-apps/api/window'
 import { disable, enable, isEnabled } from '@tauri-apps/plugin-autostart'
 import { readText } from '@tauri-apps/plugin-clipboard-manager'
@@ -116,7 +116,11 @@ export default function App() {
                 <h1>{selectedTool.name}</h1>
                 <p>{selectedTool.description}</p>
               </div>
-              <ToolWorkbench operation={selectedTool} execute={executeOperation} />
+              <ToolWorkbench
+                operation={selectedTool}
+                execute={executeOperation}
+                messages={toolMessages.en}
+              />
             </>
           ) : (
             <>

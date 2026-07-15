@@ -1,0 +1,10 @@
+---
+import InfoPage from '../../components/InfoPage.astro'
+import { localizedLocales, type Locale } from '../../i18n/catalog'
+export function getStaticPaths() {
+  return localizedLocales.map((locale) => ({ params: { locale }, props: { locale } }))
+}
+const { locale } = Astro.props as { locale: Locale }
+---
+
+<InfoPage locale={locale} page="about" />

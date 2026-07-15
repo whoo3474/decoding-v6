@@ -1,9 +1,11 @@
 import type { ChainNode, DecodeInput, DecodeResult, Detection } from '@decoding/engine'
 import { useCallback, useEffect, useRef, useState } from 'preact/hooks'
+import type { DecoderMessages } from './messages'
 
 export type DecoderWorkbenchProps = {
   decodeInput: (input: DecodeInput) => Promise<DecodeResult>
   externalInput?: { id: number; value: string } | undefined
+  messages: DecoderMessages
 }
 
 function outputText(value: unknown): string {
@@ -59,23 +61,29 @@ function EvidenceList({ detection }: { detection: Detection }) {
   )
 }
 
-function ChainView({ node }: { node: ChainNode }) {
+function ChainView({ node, messages }: { node: ChainNode; messages: DecoderMessages }) {
   return (
     <div class="chain-node" style={{ '--depth': node.depth }}>
       <div class="chain-node-heading">
         <span>{node.selected?.label ?? node.status}</span>
-        <small>{node.inputSize.toLocaleString()} bytes</small>
+        <small>
+          {node.inputSize.toLocaleString()} {messages.bytes}
+        </small>
       </div>
       {node.selected ? <EvidenceList detection={node.selected} /> : null}
-      {node.limitReason ? <div class="notice warning">Stopped: {node.limitReason}</div> : null}
+      {node.limitReason ? (
+        <div class="notice warning">
+          {messages.stopped}: {node.limitReason}
+        </div>
+      ) : null}
       {node.children.map((child) => (
-        <ChainView node={child} key={child.id} />
+        <ChainView node={child} messages={messages} key={child.id} />
       ))}
     </div>
   )
 }
 
-export function DecoderWorkbench({ decodeInput, externalInput }: DecoderWorkbenchProps) {
+export function DecoderWorkbench({ decodeInput, externalInput, messages }: DecoderWorkbenchProps) {
   const [source, setSource] = useState('')
   const [result, setResult] = useState<DecodeResult | null>(null)
   const [selected, setSelected] = useState<Detection | null>(null)
@@ -89,7 +97,7 @@ export function DecoderWorkbench({ decodeInput, externalInput }: DecoderWorkbenc
     async (input: DecodeInput) => {
       const current = ++requestId.current
       setStatus('processing')
-      setMessage('Checking formats locally…')
+      setMessage(messages.checking)
       try {
         const next = await decodeInput(input)
         if (current !== requestId.current) return
@@ -97,14 +105,14 @@ export function DecoderWorkbench({ decodeInput, externalInput }: DecoderWorkbenc
         setSelected(next.root.selected ?? next.root.candidates[0] ?? null)
         setShowCandidates(next.root.status === 'ambiguous')
         setStatus('done')
-        setMessage(next.root.status === 'unsupported' ? "We couldn't identify this yet." : '')
+        setMessage(next.root.status === 'unsupported' ? messages.unsupported : '')
       } catch (error) {
         if (current !== requestId.current) return
         setStatus('error')
-        setMessage(error instanceof Error ? error.message : 'Unable to decode this input.')
+        setMessage(error instanceof Error ? error.message : messages.decodeFailed)
       }
     },
-    [decodeInput],
+    [decodeInput, messages],
   )
 
   const handleSource = (value: string) => {
@@ -125,17 +133,19 @@ export function DecoderWorkbench({ decodeInput, externalInput }: DecoderWorkbenc
     if (!file) return
     if (file.size > 10 * 1024 * 1024) {
       setStatus('error')
-      setMessage('File exceeds the 10 MiB local safety limit.')
+      setMessage(messages.fileLimit)
       return
     }
-    setSource(`[Local file: ${file.name}, ${file.size.toLocaleString()} bytes]`)
+    setSource(
+      `[${messages.localFile}: ${file.name}, ${file.size.toLocaleString()} ${messages.bytes}]`,
+    )
     await run(new Uint8Array(await file.arrayBuffer()))
   }
 
   const copySelected = async () => {
     if (!selected) return
     await navigator.clipboard.writeText(outputText(selected.value))
-    setMessage('Selected result copied.')
+    setMessage(messages.copied)
   }
 
   const exportRedacted = () => {
@@ -159,7 +169,7 @@ export function DecoderWorkbench({ decodeInput, externalInput }: DecoderWorkbenc
     link.download = 'decoding-redacted-result.json'
     link.click()
     URL.revokeObjectURL(link.href)
-    setMessage('Redacted structure exported. Scalar values were removed.')
+    setMessage(messages.exported)
   }
 
   useEffect(() => {
@@ -179,10 +189,10 @@ export function DecoderWorkbench({ decodeInput, externalInput }: DecoderWorkbenc
   }, [])
 
   return (
-    <section class="decoder-shell" aria-label="Universal decoder">
+    <section class="decoder-shell" aria-label={messages.ariaLabel}>
       <div class="privacy-line">
         <span class="privacy-dot" aria-hidden="true" />
-        Input stays on this device. No account, upload, or AI.
+        {messages.privacy}
       </div>
       <div
         class="paste-surface"
@@ -192,13 +202,13 @@ export function DecoderWorkbench({ decodeInput, externalInput }: DecoderWorkbenc
           void handleFile(event.dataTransfer?.files[0])
         }}
       >
-        <label for="decoder-input">Paste text or drop a file</label>
+        <label for="decoder-input">{messages.pasteLabel}</label>
         <textarea
           id="decoder-input"
           ref={inputRef}
           value={source}
           onInput={(event) => handleSource(event.currentTarget.value)}
-          placeholder="JWT, Base64, Hex, timestamps, compressed data…"
+          placeholder={messages.placeholder}
           spellcheck={false}
           autocomplete="off"
           autocapitalize="off"
@@ -206,7 +216,7 @@ export function DecoderWorkbench({ decodeInput, externalInput }: DecoderWorkbenc
         />
         <div class="input-actions">
           <label class="button secondary">
-            Open file
+            {messages.openFile}
             <input
               class="visually-hidden"
               type="file"
@@ -219,9 +229,9 @@ export function DecoderWorkbench({ decodeInput, externalInput }: DecoderWorkbenc
             onClick={() => handleSource('')}
             disabled={!source}
           >
-            Clear
+            {messages.clear}
           </button>
-          <span>Max 10 MiB</span>
+          <span>{messages.maxSize}</span>
         </div>
       </div>
 
@@ -241,13 +251,17 @@ export function DecoderWorkbench({ decodeInput, externalInput }: DecoderWorkbenc
           <div class="result-chain">
             <div class="panel-heading">
               <div>
-                <span class="eyebrow">Decode chain</span>
-                <h2>{result.root.status === 'ambiguous' ? 'Possible formats' : 'Local result'}</h2>
+                <span class="eyebrow">{messages.decodeChain}</span>
+                <h2>
+                  {result.root.status === 'ambiguous'
+                    ? messages.possibleFormats
+                    : messages.localResult}
+                </h2>
               </div>
               <small>{result.elapsedMs.toFixed(1)} ms</small>
             </div>
             {showCandidates ? (
-              <div class="candidate-list" role="listbox" aria-label="Possible formats">
+              <div class="candidate-list" role="listbox" aria-label={messages.possibleFormats}>
                 {result.root.candidates.map((candidate) => (
                   <button
                     type="button"
@@ -265,14 +279,14 @@ export function DecoderWorkbench({ decodeInput, externalInput }: DecoderWorkbenc
                 ))}
               </div>
             ) : (
-              <ChainView node={result.root} />
+              <ChainView node={result.root} messages={messages} />
             )}
           </div>
           <aside class="inspector-panel">
             <div class="panel-heading">
               <div>
-                <span class="eyebrow">Inspector</span>
-                <h2>{selected?.label ?? 'No candidate'}</h2>
+                <span class="eyebrow">{messages.inspector}</span>
+                <h2>{selected?.label ?? messages.noCandidate}</h2>
               </div>
               <div class="inline-actions">
                 <button
@@ -281,7 +295,7 @@ export function DecoderWorkbench({ decodeInput, externalInput }: DecoderWorkbenc
                   onClick={() => void copySelected()}
                   disabled={!selected}
                 >
-                  Copy
+                  {messages.copy}
                 </button>
                 <button
                   class="button small secondary"
@@ -289,7 +303,7 @@ export function DecoderWorkbench({ decodeInput, externalInput }: DecoderWorkbenc
                   onClick={exportRedacted}
                   disabled={!selected}
                 >
-                  Export redacted
+                  {messages.exportRedacted}
                 </button>
               </div>
             </div>
@@ -301,7 +315,7 @@ export function DecoderWorkbench({ decodeInput, externalInput }: DecoderWorkbenc
                 </pre>
               </>
             ) : (
-              <p>Try a supported format or choose a tool from the catalog.</p>
+              <p>{messages.trySupported}</p>
             )}
             {result.root.candidates.length ? (
               <button
@@ -309,10 +323,10 @@ export function DecoderWorkbench({ decodeInput, externalInput }: DecoderWorkbenc
                 type="button"
                 onClick={() => {
                   setShowCandidates(true)
-                  setMessage('Choose another candidate. No report or payload is sent.')
+                  setMessage(messages.chooseCandidate)
                 }}
               >
-                Wrong format?
+                {messages.wrongFormat}
               </button>
             ) : null}
           </aside>

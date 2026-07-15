@@ -19,10 +19,10 @@ Updated: 2026-07-15
 ## Communication
 
 - [x] capture a short non-sensitive [product demo GIF](./decoding-demo.gif)
-- [ ] prepare Show HN post with local-only disclosure and technical architecture
-- [ ] publish distinct r/webdev, r/devops, and r/netsec posts only when each community has relevant findings
+- [x] prepare [Show HN post](./SHOW_HN.md) with local-only disclosure and technical architecture
+- [x] prepare distinct [r/webdev, r/devops, and r/netsec drafts](./COMMUNITY_POSTS.md); posting remains pending current-rule and account checks
 - [ ] connect Search Console and submit the generated sitemap
-- [ ] recruit 10 developer/SRE/security beta participants using synthetic tasks only
+- [x] prepare the [synthetic beta program](./BETA_PROGRAM.md); 10 real participants remain pending
 
 ## Privacy and support
 

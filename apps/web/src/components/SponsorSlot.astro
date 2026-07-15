@@ -1,0 +1,29 @@
+---
+import sponsorData from '../content/sponsors.json'
+import type { Locale } from '../i18n/catalog'
+import { selectSponsor } from '../lib/sponsors'
+
+interface Props {
+  locale: Locale
+  category: string
+}
+const { locale, category } = Astro.props
+const sponsor = selectSponsor(sponsorData, locale, category)
+---
+
+{
+  sponsor ? (
+    <aside class="sponsor-slot container" aria-label={sponsor.label} data-sponsor={sponsor.id}>
+      <span class="sponsor-label">{sponsor.label}</span>
+      <a href={sponsor.targetUrl} rel="sponsored noopener noreferrer" target="_blank">
+        <img src={sponsor.imagePath} alt={sponsor.imageAlt} width="96" height="64" loading="lazy" />
+        <span>
+          <>
+            <strong>{sponsor.headline}</strong>
+            <span>{sponsor.cta} →</span>
+          </>
+        </span>
+      </a>
+    </aside>
+  ) : null
+}
