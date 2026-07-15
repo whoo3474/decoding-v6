@@ -198,7 +198,7 @@
 
 - [ ] native 수요 조건은 미측정; 사용자 명시 지시로 구현만 선행하고 public notarized release는 유지 보류
 - [x] 2026-07-15 — `apps/desktop` Tauri 2와 `workbench-ui`·`engine`·`operations` 공유 경계
-- [ ] Apple Silicon local beta는 생성; universal Developer ID signed/notarized beta는 Apple credentials 필요
+- [ ] arm64·x86_64 universal engineering DMG는 생성·검증; Developer ID signed/notarized public beta는 Apple credentials 필요
 - [x] 2026-07-15 — quick panel·global shortcut·명시적 1회 clipboard read·tray/menu·file open·multiple windows
 - [x] 2026-07-15 — 공유 engine·workbench·47 Utility Pack native shell 제공
 - [x] 2026-07-15 — capability allowlist에서 shell·무제한 filesystem·HTTP·continuous clipboard 금지

@@ -44,15 +44,16 @@ The user explicitly requested implementation of the complete 47-tool, desktop, a
 
 ## Desktop artifacts
 
-The local Apple Silicon beta build is ad-hoc signed with hardened runtime for engineering validation. It is not Apple-notarized and therefore is not exposed on the public download page.
+The local Apple Silicon and universal macOS builds are ad-hoc signed with hardened runtime for engineering validation. They are not Apple-notarized and therefore are not exposed on the public download page.
 
-| Artifact                      |    Size | SHA-256                                                            |
-| ----------------------------- | ------: | ------------------------------------------------------------------ |
-| `decod.ing_6.0.0_aarch64.dmg` | 5.1 MiB | `204dac9b45eb24b87d7fe4b19a0384821ca6e9c7d286d1f12aba360fc6729e34` |
-| `decod.ing.app.tar.gz`        | 5.2 MiB | `aa2bf1ae170c253d6d5cb838144947fc48ac57898c793e75b7d2b93751044790` |
-| updater signature             |   408 B | `28bdcdc5061a1039cbd74b2749479921a34d673f8dde2a0fea7c06c899953a36` |
+| Artifact                        |    Size | SHA-256                                                            |
+| ------------------------------- | ------: | ------------------------------------------------------------------ |
+| `decod.ing_6.0.0_aarch64.dmg`   | 5.1 MiB | `204dac9b45eb24b87d7fe4b19a0384821ca6e9c7d286d1f12aba360fc6729e34` |
+| `decod.ing_6.0.0_universal.dmg` |  10 MiB | `c81ab8b06432523c90eb043c14f654f2aea245d9c9604bd8500e30abb64532d7` |
+| `decod.ing.app.tar.gz`          | 5.2 MiB | `aa2bf1ae170c253d6d5cb838144947fc48ac57898c793e75b7d2b93751044790` |
+| updater signature               |   408 B | `28bdcdc5061a1039cbd74b2749479921a34d673f8dde2a0fea7c06c899953a36` |
 
-The private updater key is outside the repository. The public key is in Tauri configuration. Native UI automation through the local accessibility bridge was unavailable, so native validation used the shared web UI E2E suite plus process, signature, bundle, capability, and socket checks.
+The universal engineering DMG contains both `x86_64` and `arm64`; `codesign --verify --deep --strict` and `hdiutil verify` pass. It is ad-hoc signed, not notarized, and is correctly rejected by Gatekeeper, so public download remains disabled. The private updater key is outside the repository. The public key is in Tauri configuration. Native UI automation through the local accessibility bridge was unavailable, so native validation used the shared web UI E2E suite plus process, signature, bundle, capability, and socket checks.
 
 ## External evidence gates — pending, not claimed
 

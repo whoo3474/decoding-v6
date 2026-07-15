@@ -22,7 +22,7 @@ Updated: 2026-07-15
 - [x] prepare [Show HN post](./SHOW_HN.md) with local-only disclosure and technical architecture
 - [x] prepare distinct [r/webdev, r/devops, and r/netsec drafts](./COMMUNITY_POSTS.md); posting remains pending current-rule and account checks
 - [ ] connect Search Console and submit the generated sitemap
-- [x] prepare the [synthetic beta program](./BETA_PROGRAM.md); 10 real participants remain pending
+- [x] publish the [synthetic beta program](./BETA_PROGRAM.md) and [public recruitment issue](https://github.com/whoo3474/decoding-v6/issues/1); 10 real participants remain pending
 
 ## Privacy and support
 
