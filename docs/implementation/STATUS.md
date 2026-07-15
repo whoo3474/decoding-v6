@@ -8,7 +8,7 @@ Updated: 2026-07-15
 - Source: <https://github.com/whoo3474/decoding-v6>
 - Fallback: <https://decoding-v6.wjstks3474.workers.dev>
 - Staging: <https://decoding-v6-staging.wjstks3474.workers.dev>
-- Cloudflare production version: `fd0ce2f9-6604-45b2-b1cc-59f01c9a7df1`
+- Cloudflare production version: `65608571-01c1-4746-989e-7de0dd3b554f`
 - Cloudflare staging version: `ae7932de-ff68-4d00-974d-ca87adde05ff`
 - Rollback and restore drill: passed on staging
 

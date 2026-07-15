@@ -6,7 +6,7 @@ Updated: 2026-07-15 (Asia/Seoul)
 
 | Surface          | URL                                                  | Worker                | Version                                | Result |
 | ---------------- | ---------------------------------------------------- | --------------------- | -------------------------------------- | ------ |
-| Production       | <https://decod.ing>                                  | `decoding-v6`         | `fd0ce2f9-6604-45b2-b1cc-59f01c9a7df1` | active |
+| Production       | <https://decod.ing>                                  | `decoding-v6`         | `65608571-01c1-4746-989e-7de0dd3b554f` | active |
 | Production alias | <https://www.decod.ing>                              | `decoding-v6`         | same deployment                        | active |
 | Workers fallback | <https://decoding-v6.wjstks3474.workers.dev>         | `decoding-v6`         | same deployment                        | active |
 | Staging          | <https://decoding-v6-staging.wjstks3474.workers.dev> | `decoding-v6-staging` | `ae7932de-ff68-4d00-974d-ca87adde05ff` | active |
